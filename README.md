@@ -38,6 +38,7 @@
    OPENROUTER_API_KEY=your_api_key_here
    npm run dev
    ```
+
    
 ## 💡 How It Works
 
@@ -51,6 +52,7 @@ Quizzes & Flashcards are requested as structured JSON data, parsed safely using 
 
 Study: The user can flip through flashcards, take the quiz, or download a comprehensive PDF guide.
 
+
 ## 🧠 Engineering Challenges Solved
 
 JSON Hallucinations: Implemented a robust parsing logic (try/catch with substring extraction) to handle cases where the LLM wraps JSON in Markdown code blocks or adds conversational text.
@@ -58,3 +60,14 @@ JSON Hallucinations: Implemented a robust parsing logic (try/catch with substrin
 Vercel Timeouts: Migrated AI routes to the Edge Runtime to bypass the standard 10-second serverless timeout limit on the free tier.
 
 Type Safety: utilized TypeScript interfaces strictly across the API and Frontend to ensure the AI's output matches the UI's expected data shape.
+
+### Why this is relevant
+I've selected a video that walks through polishing a similar Next.js AI project, specifically focusing on the deployment and "finishing touches" aspect which reinforces the steps we just took.
+
+[Final Polish & Deployment for Next.js AI Apps](https://www.youtube.com/watch?v=rekD98llX10)
+
+*(This video covers using Sonner toasts and final UI tweaks in a Next.js environment, matching your exact tech stack needs.)*
+
+
+
+http://googleusercontent.com/youtube_content/0
