@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 AI Study Companion
 
-## Getting Started
+> A full-stack Next.js application that uses Generative AI to transform raw notes into interactive study materials (Quizzes, Flashcards, and Summaries).
 
-First, run the development server:
+![Project Banner](https://via.placeholder.com/1200x600/0f172a/38bdf8?text=AI+Study+Companion+Demo)
+*(Tip: Replace this link with a real screenshot of your app)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **⚡ Real-Time Streaming:** Uses the Vercel AI SDK and Edge Runtime to stream summaries instantly, reducing perceived latency.
+- **🃏 Dynamic Flashcards:** Automatically parses unstructured text into valid JSON to generate flip-card study sets.
+- **📝 Interactive Quizzes:** Generates multiple-choice quizzes with immediate feedback and scoring logic.
+- **📄 PDF Export:** Bundles all generated materials into a downloadable PDF study guide using `@react-pdf/renderer`.
+- **💾 State Persistence:** Uses **Zustand** for global state management to synchronize data across different study modes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS & Shadcn/UI
+- **AI Integration:** Vercel AI SDK & OpenRouter (Mistral/Llama models)
+- **State Management:** Zustand
+- **Deployment:** Vercel Serverless & Edge Functions
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
+- Node.js 18+
+- An API Key from [OpenRouter](https://openrouter.ai/) (or OpenAI)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repo**
+   ```bash
+   git clone [https://github.com/yourusername/ai-study-companion.git](https://github.com/yourusername/ai-study-companion.git)
+   cd ai-study-companion
+   npm install
+   OPENROUTER_API_KEY=your_api_key_here
+   npm run dev
+   ```
+   
+💡 How It Works
+Input: The user pastes lecture notes or text into the main input field.
 
-## Deploy on Vercel
+Processing: The app sends the text to an LLM (Large Language Model) via Edge Functions.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Streaming: - The Summary is streamed token-by-token for immediate readability.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Quizzes & Flashcards are requested as structured JSON data, parsed safely using a robust custom parser to prevent application crashes.
+
+Study: The user can flip through flashcards, take the quiz, or download a comprehensive PDF guide.
+
+🧠 Engineering Challenges Solved
+JSON Hallucinations: Implemented a robust parsing logic (try/catch with substring extraction) to handle cases where the LLM wraps JSON in Markdown code blocks or adds conversational text.
+
+Vercel Timeouts: Migrated AI routes to the Edge Runtime to bypass the standard 10-second serverless timeout limit on the free tier.
+
+Type Safety: utilized TypeScript interfaces strictly across the API and Frontend to ensure the AI's output matches the UI's expected data shape.
