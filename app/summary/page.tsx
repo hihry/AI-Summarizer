@@ -286,10 +286,12 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Copy, Download, ArrowLeft, Brain, ArrowRight, Clock, FileText, TrendingUp, CheckCircle2 } from "lucide-react"
+import { Copy, Download, ArrowLeft, Brain, ArrowRight, Clock, FileText, TrendingUp, CheckCircle2, Loader2 } from "lucide-react"
 import { useState, useEffect, useRef, useMemo } from "react"
 import { useResults } from "@/store/useResults"
 import { useRouter } from "next/navigation"
+import { pdf } from '@react-pdf/renderer';
+import { StudyGuidePDF } from '@/components/StudyGuidePDF';
 import ReactMarkdown from "react-markdown"
 
 export default function SummaryPage() {
@@ -299,6 +301,8 @@ export default function SummaryPage() {
   const { 
     notes, 
     summary, 
+    flashcards,
+    quiz,
     setSummary, 
     setQuiz, 
     setFlashcards, 
@@ -308,6 +312,7 @@ export default function SummaryPage() {
   // Local UI State
   const [isScrolled, setIsScrolled] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false);
   
   // Ref to prevent double-fetching in React Strict Mode
   const hasFetched = useRef(false);
@@ -448,16 +453,48 @@ export default function SummaryPage() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const handleDownload = () => {
-    if(!summary) return;
-    const blob = new Blob([summary], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "summary.md";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleDownload = async () => {
+    // if(!summary) return;
+    // const blob = new Blob([summary], { type: "text/markdown" });
+    // const url = URL.createObjectURL(blob);
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = "summary.md";
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
+    if (!summary) return;
+    setIsDownloading(true);
+
+    try {
+      // 1. Generate the PDF blob
+      const blob = await pdf(
+        <StudyGuidePDF 
+          summary={summary} 
+          flashcards={flashcards} 
+          quiz={quiz} 
+        />
+      ).toBlob();
+
+      // 2. Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "StudyGuide.pdf";
+      document.body.appendChild(link);
+      
+      // 3. Trigger download
+      link.click();
+      
+      // 4. Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+    } finally {
+      setIsDownloading(false);
+    }
   }
 
   const handleBack = () => router.push('/notes') // Assuming input is at root
@@ -488,7 +525,7 @@ export default function SummaryPage() {
               {copied ? <CheckCircle2 className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
               {copied ? "Copied" : "Copy"}
             </Button>
-            <Button
+            {/* <Button
               variant="ghost"
               size="sm"
               onClick={handleDownload}
@@ -497,6 +534,23 @@ export default function SummaryPage() {
             >
               <Download className="mr-2 h-4 w-4" />
               Download
+            </Button> */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDownload}
+              // Disable if no summary OR if currently downloading
+              disabled={!summary || isDownloading} 
+              className="hidden transition-all hover:scale-105 sm:flex"
+            >
+              {isDownloading ? (
+                // Show Spinner when loading
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                // Show Download Icon normally
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              {isDownloading ? "Generating..." : "Download PDF"}
             </Button>
             <Button
               variant="outline"
