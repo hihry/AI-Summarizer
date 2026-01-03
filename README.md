@@ -39,7 +39,8 @@
    npm run dev
    ```
    
-💡 How It Works
+## 💡 How It Works
+
 Input: The user pastes lecture notes or text into the main input field.
 
 Processing: The app sends the text to an LLM (Large Language Model) via Edge Functions.
@@ -50,7 +51,8 @@ Quizzes & Flashcards are requested as structured JSON data, parsed safely using 
 
 Study: The user can flip through flashcards, take the quiz, or download a comprehensive PDF guide.
 
-🧠 Engineering Challenges Solved
+## 🧠 Engineering Challenges Solved
+
 JSON Hallucinations: Implemented a robust parsing logic (try/catch with substring extraction) to handle cases where the LLM wraps JSON in Markdown code blocks or adds conversational text.
 
 Vercel Timeouts: Migrated AI routes to the Edge Runtime to bypass the standard 10-second serverless timeout limit on the free tier.
