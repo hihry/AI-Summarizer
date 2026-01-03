@@ -340,11 +340,43 @@ export default function SummaryPage() {
         }).then(r => r.json());
 
         // B. Start Streaming Summary (Real-time)
+        // setSummary(""); // Clear previous
+        // const response = await fetch("/api/summarize", {
+        //   method: "POST",
+        //   body: JSON.stringify({ text: notes }),
+        // });
+
+        // if (!response.body) throw new Error("No stream body");
+
+        // const reader = response.body.getReader();
+        // const decoder = new TextDecoder();
+        // let done = false;
+        // let accumulatedText = "";
+
+        // while (!done) {
+        //   const { value, done: doneReading } = await reader.read();
+        //   done = doneReading;
+        //   const chunkValue = decoder.decode(value, { stream: true });
+          
+        //   accumulatedText += chunkValue;
+        //   setSummary(accumulatedText); // Triggers re-render
+        // }
+
         setSummary(""); // Clear previous
+        console.log("Starting summary generation..."); // DEBUG LOG
+
         const response = await fetch("/api/summarize", {
           method: "POST",
           body: JSON.stringify({ text: notes }),
         });
+
+        console.log("Response received:", response.status); // DEBUG LOG
+
+        // Handle Errors (If API returns 500 or 401)
+        if (!response.ok) {
+           setSummary("⚠️ Error: Could not generate summary. Please check your API Key or try again.");
+           throw new Error(`API Error: ${response.statusText}`);
+        }
 
         if (!response.body) throw new Error("No stream body");
 
@@ -356,12 +388,14 @@ export default function SummaryPage() {
         while (!done) {
           const { value, done: doneReading } = await reader.read();
           done = doneReading;
-          const chunkValue = decoder.decode(value, { stream: true });
           
-          accumulatedText += chunkValue;
-          setSummary(accumulatedText); // Triggers re-render
+          if (value) {
+            const chunkValue = decoder.decode(value, { stream: true });
+            console.log("Chunk received:", chunkValue); // DEBUG LOG
+            accumulatedText += chunkValue;
+            setSummary(accumulatedText);
+          }
         }
-
         // C. Resolve Standard APIs
         const [quizRes, flashRes, simpleRes] = await Promise.all([
           quizPromise, 
