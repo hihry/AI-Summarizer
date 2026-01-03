@@ -2,7 +2,7 @@
 
 > A full-stack Next.js application that uses Generative AI to transform raw notes into interactive study materials (Quizzes, Flashcards, and Summaries).
 
-### 🚀 **Live Demo:** [AI Learning Companion - Transform Your Study Notes](https://your-project-name.vercel.app)
+### 🚀 **Live Demo:** [AI Learning Companion - Transform Your Study Notes](https://ai-summarizer-tau-umber.vercel.app/)
 
 ![Project Banner](https://via.placeholder.com/1200x600/0f172a/38bdf8?text=AI+Study+Companion+Demo)
 *(Tip: Replace this link with a real screenshot of your app)*
