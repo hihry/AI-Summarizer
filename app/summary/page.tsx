@@ -461,7 +461,7 @@ export default function SummaryPage() {
   }
 
   const handleBack = () => router.push('/notes') // Assuming input is at root
-  const handleGenerateQuiz = () => router.push('/flashcards')
+  const handleGenerateQuiz = () => router.push('/quiz')
 
 
   return (
@@ -509,7 +509,7 @@ export default function SummaryPage() {
             </Button>
             <Button size="sm" onClick={handleGenerateQuiz} className="hidden transition-all hover:scale-105 sm:flex">
               <Brain className="mr-2 h-4 w-4" />
-              Watch FlasCards
+              Take Quiz
             </Button>
           </div>
         </div>
